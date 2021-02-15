@@ -3,7 +3,7 @@ import zmq
 import time
 from threading import Thread
 
-host = "127.0.0.1"
+host = "*"
 port = "5001"
 
 # Creates a socket instance
