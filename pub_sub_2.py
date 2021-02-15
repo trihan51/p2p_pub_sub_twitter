@@ -16,7 +16,7 @@ username = input("Enter your username: \n")
 # Starting Publisher
 def on_publish_tweet():
 	socket_pub = context.socket(zmq.PUB)
-	socket_pub.bind("tcp://{}:{}".format(host, port_1))
+	socket_pub.bind("tcp://{}:{}".format(host, port_2))
 	time.sleep(1)
 
 	while True:
@@ -30,7 +30,7 @@ publisher.start()
 # Starting Subscribers
 def on_receive_tweet():
 	socket_sub = context.socket(zmq.SUB)
-	socket_sub.connect("tcp://{}:{}".format(local_host, port_2))
+	socket_sub.connect("tcp://{}:{}".format(local_host, port_1))
 	socket_sub.subscribe("username")
 
 	while True:
