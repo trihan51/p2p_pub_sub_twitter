@@ -16,7 +16,6 @@ ip_name_map = {
   "172.31.28.101": "manny",
   "172.31.24.25": "moe",
   "172.31.21.186": "jack",
-  "127.0.1.1": "tony",
 }
 
 
@@ -56,18 +55,14 @@ def on_publish_tweet():
         socket_pub.send_json({"tweet": f"{tweet}"})
 
 def on_receive_tweet():
-    username = get_my_username()
-    if username != "manny":
-        pub_username = "manny"
-    else:
-        pub_username = "moe"
-    pub_ip = lookup_ip_from_name(pub_username)
+    my_username = get_my_username()
 
-    print("Connecting to {} on {}".format(pub_username, pub_ip))
     socket_sub = context.socket(zmq.SUB)
-    socket_sub.connect("tcp://{}:{}".format(pub_ip, port))
-    #socket_sub.connect("tcp://{}:{}".format(localhost, rcv_port))
-    socket_sub.subscribe(pub_username)
+    for ip, name in ip_name_map.items():
+        if name != my_username:
+            print("Connecting to {} on {}".format(name, ip))
+            socket_sub.connect("tcp://{}:{}".format(ip, port))
+            socket_sub.subscribe(name)
 
     while True:
         username = socket_sub.recv_string()
@@ -75,7 +70,6 @@ def on_receive_tweet():
         print(f"User: {username}. Tweet: {message['tweet']}")
 
 
-#username = input("Enter your username: \n")
 username = get_my_username()
 
 publisher = Thread(target=on_publish_tweet)
