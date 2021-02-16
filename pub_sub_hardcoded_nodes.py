@@ -10,7 +10,7 @@ host = "*"
 port = "5001"
 # for testing with 1 node, use these for rcv
 localhost = "localhost"
-rcv_port =  "5002"
+rcv_port =  "5001"
 
 ip_name_map = {
   "172.31.28.101": "manny",
@@ -52,7 +52,7 @@ def on_publish_tweet():
 
     while True:
         tweet = input("Enter your Tweet: \n")
-        socket_pub.send_string("username", flags=zmq.SNDMORE)
+        socket_pub.send_string(username, flags=zmq.SNDMORE)
         socket_pub.send_json({"tweet": f"{tweet}"})
 
 def on_receive_tweet():
@@ -67,7 +67,7 @@ def on_receive_tweet():
     socket_sub = context.socket(zmq.SUB)
     socket_sub.connect("tcp://{}:{}".format(pub_ip, port))
     #socket_sub.connect("tcp://{}:{}".format(localhost, rcv_port))
-    socket_sub.subscribe("username")
+    socket_sub.subscribe(pub_username)
 
     while True:
         username = socket_sub.recv_string()
