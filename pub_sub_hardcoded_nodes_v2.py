@@ -68,22 +68,17 @@ def lookup_ip_from_name(name):
 
 def on_publish_tweet():
     global socket_pub
+    username = get_my_username()
     tweet = input("Enter your Tweet: \n")
     socket_pub.send_string(username, flags=zmq.SNDMORE)
     socket_pub.send_json({"tweet": f"{tweet}"})
 
 def on_receive_tweet():
     global socket_sub
-    my_username = get_my_username()
-    username = socket_sub.recv_string()
-    message = socket_sub.recv_json()
-    print(f"User: {username}. Tweet: {message['tweet']}")
-
-# publisher = Thread(target=on_publish_tweet)
-# subscriber = Thread(target=on_receive_tweet)
-
-# publisher.start()
-# subscriber.start()
+    while True:
+        username = socket_sub.recv_string()
+        message = socket_sub.recv_json()
+        print(f"User: {username}. Tweet: {message['tweet']}")
 
 def print_options():
     print("--------------------")
@@ -97,6 +92,7 @@ def print_options():
     print("6. print menu")
     print("7. Shutdown")
 
+######################### Main #########################
 def main():
     global socket_pub
     global socket_sub
@@ -104,14 +100,11 @@ def main():
     # initialize the publisher and subscribers
     init_publisher()
     init_subscribers()
-
     subscriber = Thread(target=on_receive_tweet)
     subscriber.start()
 
-    # print the options
+    # Print Menu and Process User Input
     print_options()
-
-    # process user input
     while True: 
         selected_option = input("Please select a numbered option: ")
         if selected_option == "1":
@@ -126,8 +119,7 @@ def main():
             username = Input("Enter new username: ")
             ip_name_map[get_my_ip()] = username
         elif selected_option == "5":
-            t_publish = Thread(target=on_publish_tweet)
-            t_publish.start()
+            on_publish_tweet()
         elif selected_option == "6":
             print_options()
         elif selected_option == "7":
