@@ -127,7 +127,7 @@ def main():
             ip_name_map[get_my_ip()] = username
         elif selected_option == "5":
             t_publish = Thread(target=on_publish_tweet)
-            t_pubish.start()
+            t_publish.start()
         elif selected_option == "6":
             print_options()
         elif selected_option == "7":
