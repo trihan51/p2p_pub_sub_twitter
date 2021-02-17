@@ -7,6 +7,7 @@ import zmq
 import time
 from threading import Thread
 
+######################### Global Variables #########################
 host = "*"
 port = "5001"
 # for testing with 1 node, use these for rcv
@@ -22,7 +23,6 @@ ip_name_map = {
 # Creates a socket instance
 context = zmq.Context()
 
-######################### Global Variables #########################
 socket_pub = None
 socket_sub = None
 
