@@ -82,6 +82,7 @@ def on_receive_tweet():
 # subscriber.start()
 
 def print_options():
+    print("--------------------")
     print("Menu of Options")
     print("--------------------")
     print("1. Subscribe")
@@ -97,6 +98,9 @@ def main():
     init_publisher()
     init_subscribers()
 
+    subscriber = Thread(target=on_receive_tweet)
+    subscriber.start()
+
     # print the options
     print_options()
 
@@ -104,15 +108,19 @@ def main():
     while True: 
         selected_option = input("Please select a numbered option: ")
         if selected_option == "1":
-            print("1")
+            username = Input("Enter username: ")
+            socket_sub.subscribe(username)
         elif selected_option == "2":
-            print("2")
+            username = Input("Enter username: ")
+            socket_sub.unsubscribe(username)
         elif selected_option == "3":
             print("3")
         elif selected_option == "4":
-            print("4")
+            username = Input("Enter new username: ")
+            ip_name_map[get_my_ip()] = username
         elif selected_option == "5":
-            print("5")
+            t_publish = Thread(target=on_publish_tweet)
+            t_pubish.start()
         elif selected_option == "6":
             print_options()
         elif selected_option == "7":
