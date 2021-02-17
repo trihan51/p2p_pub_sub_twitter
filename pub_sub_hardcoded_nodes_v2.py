@@ -108,15 +108,15 @@ def main():
     while True: 
         selected_option = input("Please select a numbered option: ")
         if selected_option == "1":
-            username = Input("Enter username: ")
+            username = input("Enter username: ")
             socket_sub.subscribe(username)
         elif selected_option == "2":
-            username = Input("Enter username: ")
+            username = input("Enter username: ")
             socket_sub.unsubscribe(username)
         elif selected_option == "3":
             print("3")
         elif selected_option == "4":
-            username = Input("Enter new username: ")
+            username = input("Enter new username: ")
             ip_name_map[get_my_ip()] = username
         elif selected_option == "5":
             on_publish_tweet()
