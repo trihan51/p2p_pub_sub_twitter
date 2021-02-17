@@ -28,12 +28,14 @@ socket_sub = None
 
 ######################### Init Functions #########################
 def init_publisher():
+    global socket_pub
     username = get_my_username()
     socket_pub = context.socket(zmq.PUB)
     socket_pub.bind("tcp://{}:{}".format(host, port))
     time.sleep(1)
 
 def init_subscribers():
+    global socket_sub
     my_username = get_my_username()
     socket_sub = context.socket(zmq.SUB)
     for ip, name in ip_name_map.items():
@@ -65,11 +67,13 @@ def lookup_ip_from_name(name):
     return ""
 
 def on_publish_tweet():
+    global socket_pub
     tweet = input("Enter your Tweet: \n")
     socket_pub.send_string(username, flags=zmq.SNDMORE)
     socket_pub.send_json({"tweet": f"{tweet}"})
 
 def on_receive_tweet():
+    global socket_sub
     my_username = get_my_username()
     username = socket_sub.recv_string()
     message = socket_sub.recv_json()
@@ -94,6 +98,9 @@ def print_options():
     print("7. Shutdown")
 
 def main():
+    global socket_pub
+    global socket_sub
+
     # initialize the publisher and subscribers
     init_publisher()
     init_subscribers()
